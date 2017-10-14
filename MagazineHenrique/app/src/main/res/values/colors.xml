@@ -5,4 +5,5 @@
     <color name="colorAccent">#7a407e</color>
     <color name="colorPrimary1">#3F51B5</color>
     <color name="colorAccent1">#303F9F</color>
+    <color name="corTituloToolbarCadastro">#FFFFFF</color>
 </resources>

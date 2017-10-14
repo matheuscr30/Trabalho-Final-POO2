@@ -10,12 +10,12 @@ public class Cliente {
     private String Nome;
     private String CPF;
     private String Senha;
-    private String Sobrenome;
     private String Telefone;
     private String Email;
     private String Cidade;
     private String Estado;
-    private String Pais;
+    private String Endereco;
+    private String CEP;
     private int idade;
     private char sexo;
 
@@ -46,14 +46,6 @@ public class Cliente {
 
     public void setSenha(String senha) {
         Senha = senha;
-    }
-
-    public String getSobrenome() {
-        return Sobrenome;
-    }
-
-    public void setSobrenome(String sobrenome) {
-        Sobrenome = sobrenome;
     }
 
     public String getTelefone() {
@@ -88,12 +80,20 @@ public class Cliente {
         Estado = estado;
     }
 
-    public String getPais() {
-        return Pais;
+    public String getEndereco() {
+        return Endereco;
     }
 
-    public void setPais(String pais) {
-        Pais = pais;
+    public void setEndereco(String endereco) {
+        Endereco = endereco;
+    }
+
+    public String getCEP() {
+        return CEP;
+    }
+
+    public void setCEP(String CEP) {
+        this.CEP = CEP;
     }
 
     public int getIdade() {
