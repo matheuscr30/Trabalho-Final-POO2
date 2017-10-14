@@ -21,9 +21,9 @@ public class CadastroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro);
 
-        toolbar = (Toolbar)findViewById(R.id.toolbar2);
+        toolbar = (Toolbar)findViewById(R.id.toolbarCadastro);
         toolbar.setTitle("Cadastro de Usuarios");
-        toolbar.setTitleTextColor(getResources().getColor(R.color.corTituloToolbarCadastro));
+        toolbar.setTitleTextColor(getResources().getColor(R.color.corTituloToolbar));
         setSupportActionBar(toolbar);
 
         ArrayList<String> arraylist = new ArrayList<String>();
