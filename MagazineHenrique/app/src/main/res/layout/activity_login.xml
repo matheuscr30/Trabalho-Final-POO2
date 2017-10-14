@@ -16,17 +16,21 @@
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
+            android:id="@+id/inputLayoutEmailLogin"
             android:layout_height="wrap_content">
 
             <AutoCompleteTextView
                 android:id="@+id/textEmailLogin"
+                android:inputType="text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:imeOptions="actionNext"
                 android:layout_weight="1"
                 android:hint="Email" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
+            android:id="@+id/inputLayoutSenhaLogin"
             android:layout_width="match_parent"
             android:layout_marginTop="12dp"
             app:passwordToggleEnabled="true"
@@ -70,7 +74,8 @@
                 android:text="Cadastre-se"
                 android:textAlignment="center"
                 android:textAllCaps="true"
-                android:textColor="?android:attr/textColorPrimaryNoDisable"
+                android:textColor="@color/colorPrimary"
+                android:textSize="13sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -82,7 +87,8 @@
                 android:text="Esqueci Minha Senha"
                 android:textAlignment="center"
                 android:textAllCaps="true"
-                android:textColor="@android:color/black"
+                android:textColor="@color/colorPrimary"
+                android:textSize="13sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
