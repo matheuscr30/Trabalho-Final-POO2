@@ -1,5 +1,7 @@
 package com.matheus.magazinehenrique.dao;
 
+import android.util.Log;
+
 import com.google.firebase.database.DatabaseReference;
 import com.matheus.magazinehenrique.config.ConfiguracaoFirebase;
 import com.matheus.magazinehenrique.model.Cliente;
@@ -18,8 +20,9 @@ public class ClienteDAO {
 
     public boolean salvarCliente(Cliente cliente){
         try{
-            databaseReference = databaseReference.child("users")
-                    .child(cliente.getEmail());
+            Log.i("SHIT", "OQ");
+            databaseReference = databaseReference.child("usuarios")
+                    .child(cliente.getCPF());
             databaseReference.setValue(cliente);
             return true;
         } catch (Exception e){
@@ -30,8 +33,8 @@ public class ClienteDAO {
 
     public boolean excluirCliente(Cliente cliente){
         try{
-            databaseReference = databaseReference.child("users")
-                    .child(cliente.getEmail());
+            databaseReference = databaseReference.child("usuarios")
+                    .child(cliente.getCPF());
             databaseReference.removeValue();
             return true;
         } catch (Exception e){

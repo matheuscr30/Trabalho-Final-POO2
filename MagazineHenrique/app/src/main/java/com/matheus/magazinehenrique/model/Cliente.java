@@ -9,15 +9,16 @@ public class Cliente {
 
     private String Nome;
     private String CPF;
-    private String Senha;
-    private String Telefone;
     private String Email;
-    private String Cidade;
-    private String Estado;
-    private String Endereco;
+    private String Senha;
+    private int Idade;
+    private String Sexo;
+    private String Telefone;
     private String CEP;
-    private int idade;
-    private char sexo;
+    private String Estado;
+    private String Cidade;
+    private String Endereco;
+    private int Numero;
 
     public Cliente(){
 
@@ -97,18 +98,26 @@ public class Cliente {
     }
 
     public int getIdade() {
-        return idade;
+        return Idade;
     }
 
     public void setIdade(int idade) {
-        this.idade = idade;
+        this.Idade = idade;
     }
 
-    public char getSexo() {
-        return sexo;
+    public String getSexo() {
+        return Sexo;
     }
 
-    public void setSexo(char sexo) {
-        this.sexo = sexo;
+    public void setSexo(String sexo) {
+        this.Sexo = sexo;
+    }
+
+    public int getNumero() {
+        return Numero;
+    }
+
+    public void setNumero(int numero) {
+        Numero = numero;
     }
 }
