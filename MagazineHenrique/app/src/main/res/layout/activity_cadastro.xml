@@ -125,6 +125,12 @@
                         android:orientation="horizontal"
                         android:paddingTop="10dp">
 
+                        <Spinner
+                            android:id="@+id/spinnerCadastro"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2" />
+
                         <RadioGroup
                             android:id="@+id/radioGroupCadastro"
                             android:layout_width="match_parent"
@@ -175,6 +181,7 @@
                         <android.support.design.widget.TextInputLayout
                             android:id="@+id/inputLayoutCEPCadastro"
                             android:layout_width="match_parent"
+                            android:layout_weight="1"
                             android:layout_height="match_parent">
 
                             <EditText
@@ -187,33 +194,30 @@
 
                         <android.support.design.widget.TextInputLayout
                             android:layout_width="match_parent"
+                            android:layout_weight="1"
                             android:layout_height="match_parent">
 
                             <EditText
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="hint" />
+                                android:hint="Estado" />
                         </android.support.design.widget.TextInputLayout>
 
                         <android.support.design.widget.TextInputLayout
                             android:layout_width="match_parent"
+                            android:layout_weight="1"
                             android:layout_height="match_parent">
 
                             <EditText
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="hint" />
+                                android:hint="Cidade" />
                         </android.support.design.widget.TextInputLayout>
                     </LinearLayout>
+
                 </LinearLayout>
             </ScrollView>
         </RelativeLayout>
     </LinearLayout>
-
-    <Spinner
-        android:id="@+id/spinnerCadastro"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="2" />
 
 </android.support.design.widget.CoordinatorLayout>
