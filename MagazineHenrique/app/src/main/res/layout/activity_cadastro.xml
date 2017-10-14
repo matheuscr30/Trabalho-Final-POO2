@@ -181,7 +181,7 @@
                         <android.support.design.widget.TextInputLayout
                             android:id="@+id/inputLayoutCEPCadastro"
                             android:layout_width="match_parent"
-                            android:layout_weight="1"
+                            android:layout_weight="2"
                             android:layout_height="match_parent">
 
                             <EditText
@@ -189,32 +189,75 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="CEP"
-                                android:inputType="number" />
+                                android:inputType="number"
+                                android:maxLength="7" />
                         </android.support.design.widget.TextInputLayout>
 
                         <android.support.design.widget.TextInputLayout
+                            android:id="@+id/inputLayoutEstadoCadastro"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                            <EditText
+                                android:id="@+id/editTextEstadoCadastro"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Estado"
+                                android:maxLength="3" />
+                        </android.support.design.widget.TextInputLayout>
+
+                    </LinearLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/inputLayoutCidadeCadastro"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2">
+
+                        <EditText
+                            android:id="@+id/editTextCidadeCadastro"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Cidade" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/inputLayoutRuaCadastro"
                             android:layout_width="match_parent"
                             android:layout_weight="1"
                             android:layout_height="match_parent">
 
                             <EditText
+                                android:id="@+id/editTextRuaCadastro"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Estado" />
+                                android:hint="Rua" />
                         </android.support.design.widget.TextInputLayout>
 
                         <android.support.design.widget.TextInputLayout
+                            android:id="@+id/inputLayoutNumeroCadastro"
                             android:layout_width="match_parent"
-                            android:layout_weight="1"
+                            android:layout_weight="2"
                             android:layout_height="match_parent">
 
                             <EditText
+                                android:id="@+id/editTextNumeroCadastro"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Cidade" />
+                                android:inputType="number"
+                                android:hint="Numero" />
                         </android.support.design.widget.TextInputLayout>
                     </LinearLayout>
 
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp" />
                 </LinearLayout>
             </ScrollView>
         </RelativeLayout>

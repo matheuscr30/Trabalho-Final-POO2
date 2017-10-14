@@ -52,8 +52,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="15dp"
+            android:background="@color/colorPrimary"
             android:elevation="15dp"
-            android:background="@color/colorPrimaryDark"
             android:text="Entrar"
             android:textColor="?android:attr/textColorPrimaryInverse" />
 
