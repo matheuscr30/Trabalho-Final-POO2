@@ -170,7 +170,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Telefone"
-                            android:inputType="phone"
+                            android:inputType="number"
                             android:maxLength="14" />
                     </android.support.design.widget.TextInputLayout>
 
