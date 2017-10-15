@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MagazineHenrique</string>
+    <string name="closeDrawerLayout">Fechar aba de navegação</string>
+    <string name="openNavigation">Abrir aba de navegação</string>
 </resources>
