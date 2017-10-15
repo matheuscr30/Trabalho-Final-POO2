@@ -24,7 +24,7 @@ Smartphone with Android 6.0+
 ## Authors
 
 * **Matheus Cunha Reis** (https://github.com/matheuscr)
-* **Andressa Alvilino Ferreira Silva** (https://gist.github.com/andressaafs)
+* **Andressa Alvilino Ferreira Silva** (https://github.com/andressaafs)
 * **Matheus dos Santos Mendes**
 * **Laura Tasso**
 
