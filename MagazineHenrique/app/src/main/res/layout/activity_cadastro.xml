@@ -204,8 +204,9 @@
                                 android:id="@+id/editTextEstadoCadastro"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:inputType="textPersonName"
+                                android:enabled="false"
                                 android:hint="Estado"
+                                android:inputType="textPersonName"
                                 android:maxLength="3" />
                         </android.support.design.widget.TextInputLayout>
 
@@ -221,8 +222,9 @@
                             android:id="@+id/editTextCidadeCadastro"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="textPersonName"
-                            android:hint="Cidade" />
+                            android:enabled="false"
+                            android:hint="Cidade"
+                            android:inputType="textPersonName" />
                     </android.support.design.widget.TextInputLayout>
 
                     <LinearLayout
@@ -239,9 +241,10 @@
                             <android.support.design.widget.TextInputEditText
                                 android:id="@+id/editTextEnderecoCadastro"
                                 android:layout_width="match_parent"
-                                android:inputType="textPersonName"
                                 android:layout_height="wrap_content"
-                                android:hint="Endereco" />
+                                android:enabled="false"
+                                android:hint="Endereco"
+                                android:inputType="textPersonName" />
                         </android.support.design.widget.TextInputLayout>
 
                         <android.support.design.widget.TextInputLayout

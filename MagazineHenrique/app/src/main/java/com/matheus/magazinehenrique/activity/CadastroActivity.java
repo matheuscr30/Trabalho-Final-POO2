@@ -1,6 +1,7 @@
 package com.matheus.magazinehenrique.activity;
 
 import android.app.DownloadManager;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -30,7 +31,9 @@ import com.matheus.magazinehenrique.config.ConfiguracaoFirebase;
 import com.matheus.magazinehenrique.dao.ClienteDAO;
 import com.matheus.magazinehenrique.tools.Mask;
 import com.matheus.magazinehenrique.model.Cliente;
+import com.matheus.magazinehenrique.tools.RepoCEP;
 import com.matheus.magazinehenrique.tools.ValidaCPF;
+import com.matheus.magazinehenrique.tools.ViaCepServices;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -39,6 +42,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.lang.Object.*;
+import java.util.List;
+import java.util.concurrent.ThreadPoolExecutor;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class CadastroActivity extends AppCompatActivity {
 
@@ -92,6 +102,48 @@ public class CadastroActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 cadastraCliente();
+            }
+        });
+
+        inputLayoutCEP.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if(!hasFocus) chamaViaCep();
+            }
+        });
+    }
+
+    private void chamaViaCep(){
+        final ProgressDialog progressDialog = new ProgressDialog( CadastroActivity.this );
+        progressDialog.setTitle("Carregando");
+        progressDialog.setMessage("Aguarde um pouco...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://viacep.com.br")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        ViaCepServices viaCepServices = retrofit.create(ViaCepServices.class);
+        String cep = Mask.unmask(inputLayoutCEP.getEditText().getText().toString());
+        Log.i("RUIM", cep);
+        Call<RepoCEP> repos = viaCepServices.
+                listRepos(cep);
+        repos.enqueue(new Callback<RepoCEP>() {
+            @Override
+            public void onResponse(Call<RepoCEP> call, retrofit2.Response<RepoCEP> response) {
+
+                RepoCEP repoResponse = response.body();
+                inputLayoutEstado.getEditText().setText(repoResponse.getEstado());
+                inputLayoutCidade.getEditText().setText(repoResponse.getCidade());
+                inputLayoutEndereco.getEditText().setText(repoResponse.getRua());
+                progressDialog.dismiss();
+            }
+
+            @Override
+            public void onFailure(Call<RepoCEP> call, Throwable t) {
+                t.printStackTrace();
+                progressDialog.dismiss();
             }
         });
     }
