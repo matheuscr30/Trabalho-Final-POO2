@@ -35,6 +35,8 @@ import com.matheus.magazinehenrique.tools.RepoCEP;
 import com.matheus.magazinehenrique.tools.ValidaCPF;
 import com.matheus.magazinehenrique.tools.ViaCepServices;
 
+import org.w3c.dom.Text;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -65,6 +67,7 @@ public class CadastroActivity extends AppCompatActivity {
     private TextInputLayout inputLayoutCidade;
     private TextInputLayout inputLayoutEndereco;
     private TextInputLayout inputLayoutNumero;
+    private TextInputLayout inputLayoutComplemento;
     private TextInputLayout inputLayoutConfirmarSenha;
     private FloatingActionButton fabBotaoCadastro;
 
@@ -94,6 +97,7 @@ public class CadastroActivity extends AppCompatActivity {
         inputLayoutCidade = (TextInputLayout)findViewById(R.id.inputLayoutCidadeCadastro);
         inputLayoutEndereco = (TextInputLayout)findViewById(R.id.inputLayoutEnderecoCadastro);
         inputLayoutNumero = (TextInputLayout)findViewById(R.id.inputLayoutNumeroCadastro);
+        inputLayoutComplemento = (TextInputLayout)findViewById(R.id.inputLayoutComplementoCadastro);
         fabBotaoCadastro = (FloatingActionButton)findViewById(R.id.fabCadastro);
 
         configuracaoTela();
@@ -108,9 +112,16 @@ public class CadastroActivity extends AppCompatActivity {
         inputLayoutCEP.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
-                if(!hasFocus) chamaViaCep();
+                if(!hasFocus && validaCep()) chamaViaCep();
             }
         });
+    }
+
+    private boolean validaCep(){
+        if(inputLayoutCEP.getEditText().getText().toString().equals("") ||
+                inputLayoutCEP.getEditText().getText().toString().length() != 9)
+            return false;
+        return true;
     }
 
     private void chamaViaCep(){
@@ -176,6 +187,7 @@ public class CadastroActivity extends AppCompatActivity {
         cliente.setEstado(inputLayoutEstado.getEditText().getText().toString());
         cliente.setCidade(inputLayoutCidade.getEditText().getText().toString());
         cliente.setEndereco(inputLayoutEndereco.getEditText().getText().toString());
+        cliente.setComplemento(inputLayoutComplemento.getEditText().getText().toString());
         cliente.setNumero(Integer.parseInt(inputLayoutNumero.getEditText().getText().toString()));
 
         firebaseAuth = ConfiguracaoFirebase.getFirebaseAuth();

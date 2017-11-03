@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     tools:context="com.matheus.magazinehenrique.activity.LoginActivity">
 
     <LinearLayout
@@ -23,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:layout_marginBottom="10dp"
-            app:srcCompat="@drawable/a19074044_985615201581081_1026567947_n" />
+            app:srcCompat="@drawable/logo" />
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/inputLayoutEmailLogin"

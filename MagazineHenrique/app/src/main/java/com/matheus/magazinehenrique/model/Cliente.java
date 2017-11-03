@@ -10,6 +10,7 @@ public class Cliente {
     private String Nome;
     private String CPF;
     private String Email;
+    @Exclude
     private String Senha;
     private int Idade;
     private String Sexo;
@@ -19,6 +20,7 @@ public class Cliente {
     private String Cidade;
     private String Endereco;
     private int Numero;
+    private String complemento;
 
     public Cliente(){
 
@@ -119,5 +121,13 @@ public class Cliente {
 
     public void setNumero(int numero) {
         Numero = numero;
+    }
+
+    public String getComplemento() {
+        return complemento;
+    }
+
+    public void setComplemento(String complemento) {
+        this.complemento = complemento;
     }
 }

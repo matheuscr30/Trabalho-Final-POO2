@@ -1,5 +1,6 @@
 package com.matheus.magazinehenrique.activity;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -51,6 +52,7 @@ public class EsqueciSenhaActivity extends AppCompatActivity {
                                             "Recuperação de acesso iniciada. Email enviado.",
                                             Toast.LENGTH_SHORT
                                     ).show();
+                                    abrirLoginActivity();
                                 }
                                 else{
                                     Toast.makeText(
@@ -63,5 +65,11 @@ public class EsqueciSenhaActivity extends AppCompatActivity {
                         });
             }
         });
+    }
+
+    private void abrirLoginActivity(){
+        Intent intent = new Intent(EsqueciSenhaActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

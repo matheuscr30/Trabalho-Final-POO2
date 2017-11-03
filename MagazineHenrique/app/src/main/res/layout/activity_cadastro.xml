@@ -262,9 +262,29 @@
                         </android.support.design.widget.TextInputLayout>
                     </LinearLayout>
 
-                    <Space
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="60dp" />
+                        android:orientation="horizontal"
+                        android:layout_height="match_parent">
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/inputLayoutComplementoCadastro"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                            <android.support.design.widget.TextInputEditText
+                                android:id="@+id/editTextComplementoCadastro"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Complemento"
+                                android:inputType="number" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <Space
+                            android:layout_width="match_parent"
+                            android:layout_weight="2"
+                            android:layout_height="match_parent" />
+                    </LinearLayout>
                 </LinearLayout>
             </ScrollView>
         </RelativeLayout>

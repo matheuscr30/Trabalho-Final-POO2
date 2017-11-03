@@ -5,4 +5,10 @@
     <item
         android:title="Sair"
         android:id="@+id/item_sair"/>
+    <item
+        android:id="@+id/item_carrinho"
+        android:icon="@drawable/ic_shopping_cart"
+        android:title="Carrinho"
+        app:showAsAction="ifRoom" />
+
 </menu>
