@@ -1,5 +1,13 @@
 <resources>
-    <string name="app_name">MagazineHenrique</string>
+    <string name="app_name">Summer EletroFashion</string>
     <string name="closeDrawerLayout">Fechar aba de navegação</string>
     <string name="openNavigation">Abrir aba de navegação</string>
+    <string name="title_activity_carrinho">CarrinhoActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_confirmacao">ConfirmacaoActivity</string>
+    <string name="title_activity_compra">CompraActivity</string>
 </resources>

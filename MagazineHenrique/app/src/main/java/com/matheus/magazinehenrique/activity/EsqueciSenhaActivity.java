@@ -49,7 +49,7 @@ public class EsqueciSenhaActivity extends AppCompatActivity {
                                 if( task.isSuccessful() ){
                                     Toast.makeText(
                                             EsqueciSenhaActivity.this,
-                                            "Recuperação de acesso iniciada. Email enviado.",
+                                            "Email para recuperação de senha enviado",
                                             Toast.LENGTH_SHORT
                                     ).show();
                                     abrirLoginActivity();

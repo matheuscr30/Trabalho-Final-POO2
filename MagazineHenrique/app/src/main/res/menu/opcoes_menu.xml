@@ -3,8 +3,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:title="Sair"
-        android:id="@+id/item_sair"/>
+        android:id="@+id/app_bar_search"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        android:icon="@drawable/ic_search"
+        android:title="Buscar"
+        app:showAsAction="collapseActionView|always"
+        />
     <item
         android:id="@+id/item_carrinho"
         android:icon="@drawable/ic_shopping_cart"

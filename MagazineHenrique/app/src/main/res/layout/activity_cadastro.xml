@@ -64,7 +64,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Nome"
-                            android:inputType="textPersonName" />
+                            android:inputType="textPersonName"
+                            android:singleLine="true" />
                     </android.support.design.widget.TextInputLayout>
 
                     <android.support.design.widget.TextInputLayout
@@ -78,7 +79,8 @@
                             android:layout_height="wrap_content"
                             android:hint="CPF"
                             android:inputType="number"
-                            android:maxLength="14" />
+                            android:maxLength="14"
+                            android:singleLine="true" />
                     </android.support.design.widget.TextInputLayout>
 
                     <android.support.design.widget.TextInputLayout
@@ -91,7 +93,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Email"
-                            android:inputType="textEmailAddress" />
+                            android:inputType="textEmailAddress"
+                            android:singleLine="true" />
                     </android.support.design.widget.TextInputLayout>
 
                     <android.support.design.widget.TextInputLayout
@@ -104,7 +107,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Senha"
-                            android:inputType="textPassword" />
+                            android:inputType="textPassword"
+                            android:singleLine="true" />
                     </android.support.design.widget.TextInputLayout>
 
                     <android.support.design.widget.TextInputLayout
@@ -117,7 +121,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Confirmar Senha"
-                            android:inputType="textPassword" />
+                            android:inputType="textPassword"
+                            android:singleLine="true" />
                     </android.support.design.widget.TextInputLayout>
 
                     <LinearLayout
@@ -171,7 +176,8 @@
                             android:layout_height="wrap_content"
                             android:hint="Telefone"
                             android:inputType="number"
-                            android:maxLength="14" />
+                            android:maxLength="14"
+                            android:singleLine="true" />
                     </android.support.design.widget.TextInputLayout>
 
                     <LinearLayout
@@ -191,7 +197,8 @@
                                 android:layout_height="wrap_content"
                                 android:hint="CEP"
                                 android:inputType="number"
-                                android:maxLength="9" />
+                                android:maxLength="9"
+                                android:singleLine="true" />
                         </android.support.design.widget.TextInputLayout>
 
                         <android.support.design.widget.TextInputLayout
@@ -257,8 +264,9 @@
                                 android:id="@+id/editTextNumeroCadastro"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:hint="Numero"
                                 android:inputType="number"
-                                android:hint="Numero" />
+                                android:singleLine="true" />
                         </android.support.design.widget.TextInputLayout>
                     </LinearLayout>
 
@@ -277,7 +285,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="Complemento"
-                                android:inputType="number" />
+                                android:inputType="number"
+                                android:singleLine="true" />
                         </android.support.design.widget.TextInputLayout>
 
                         <Space

@@ -38,7 +38,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
-                android:hint="Email" />
+                android:hint="Email"
+                android:singleLine="true" />
         </android.support.design.widget.TextInputLayout>
 
         <Button

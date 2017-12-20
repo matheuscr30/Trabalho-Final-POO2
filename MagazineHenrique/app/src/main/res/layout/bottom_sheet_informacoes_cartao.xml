@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragment_history_menu_bottom"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#ffffff"
+    app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:background="@color/colorPrimary"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/ivFecharInformacoesCartao"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                app:srcCompat="@drawable/ic_clear_white" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="Adicionar Cartão de Crédito"
+                android:textColor="@android:color/white"
+                android:textSize="19sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="0.5dip"
+            android:layout_marginBottom="8dp"
+            android:background="@color/common_google_signin_btn_text_dark_disabled" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="5dp">
+
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/editTextNumeroCartao"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Número do Cartão"
+                android:inputType="number"
+                android:maxLength="16"
+                android:singleLine="true" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/editTextMesCartao"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:hint="MM"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:singleLine="true" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="3"
+                    android:gravity="center"
+                    android:text="/"
+                    android:textAlignment="center"
+                    android:textSize="25sp" />
+
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/editTextAnoCartao"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:hint="YY"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:singleLine="true" />
+            </LinearLayout>
+
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/editTextCVCartao"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Código de Segurança"
+                android:inputType="number"
+                android:maxLength="3"
+                android:singleLine="true" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/editTextNomeCartao"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Nome"
+                    android:inputType="text"
+                    android:singleLine="true" />
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/editTextSobrenomeCartao"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Sobrenome"
+                    android:inputType="text"
+                    android:singleLine="true" />
+
+            </LinearLayout>
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/editTextCPFCartao"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="CPF"
+                android:inputType="number"
+                android:maxLines="11"
+                android:singleLine="true" />
+
+            <Spinner
+                android:layout_marginTop="5dp"
+                android:id="@+id/spinnerInformacoesCartao"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/btnConfirmarInformacoesCartao"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@color/colorPrimary"
+                android:text="Confirmar"
+                android:textColor="@android:color/white" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>

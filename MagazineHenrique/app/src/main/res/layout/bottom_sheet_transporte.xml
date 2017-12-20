@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragment_history_menu_bottom"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#ffffff"
+    android:orientation="vertical"
+    app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/ivFecharTransporte"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            app:srcCompat="@drawable/ic_clear" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="Escolha a Opção de Transporte"
+            android:textColor="@android:color/black"
+            android:textSize="19sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="0.5dip"
+        android:layout_marginBottom="8dp"
+        android:background="@color/common_google_signin_btn_text_dark_disabled" />
+
+    <RadioGroup
+        android:id="@+id/rgTransporte"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:inputType="text"
+        android:paddingLeft="16dp"
+        android:paddingBottom="10dp"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/rbPAC"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layoutDirection="rtl"
+            android:paddingStart="257dp"
+            android:textStyle="bold"
+            android:textColor="@color/colorAccent1"
+            android:text="PAC" />
+
+        <RadioButton
+            android:id="@+id/rbSEDEX"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layoutDirection="rtl"
+            android:textColor="@color/colorAccent1"
+            android:textStyle="bold"
+            android:paddingStart="240dp"
+            android:text="SEDEX" />
+    </RadioGroup>
+</LinearLayout>

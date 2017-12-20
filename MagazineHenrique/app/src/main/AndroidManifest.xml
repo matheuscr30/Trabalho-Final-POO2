@@ -5,11 +5,10 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-    <!--Configuracao para receber notificação -->
-    <service
-        android:name=".MyFirebaseMessagingService">
+    <!-- Configuracao para receber notificação -->
+    <service android:name=".MyFirebaseMessagingService">
         <intent-filter>
-            <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            <action android:name="com.google.firebase.MESSAGING_EVENT" />
         </intent-filter>
     </service>
 
@@ -20,16 +19,73 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.MainActivity" />
-        <activity android:name=".activity.LoginActivity">
+        <activity android:name=".activity.MainActivity">
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.LoginActivity"
+            android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.CadastroActivity" />
-        <activity android:name=".activity.EsqueciSenhaActivity"></activity>
+        <activity
+            android:name=".activity.CadastroActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".activity.EsqueciSenhaActivity" />
+        <activity
+            android:name=".activity.CarrinhoActivity"
+            android:label="@string/title_activity_carrinho"
+            android:parentActivityName=".activity.MainActivity"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.matheus.magazinehenrique.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activity.DetalhesActivity"
+            android:parentActivityName=".activity.MainActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.matheus.magazinehenrique.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activity.PagamentoActivity"
+            android:windowSoftInputMode="stateHidden"
+            android:windowTranslucentNavigation="true"
+            android:windowTranslucentStatus="true">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.matheus.magazinehenrique.activity.CarrinhoActivity" />
+        </activity>
+        <activity
+            android:name=".activity.ConfirmacaoActivity"
+            android:label="@string/title_activity_confirmacao"
+            android:parentActivityName=".activity.MainActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.matheus.magazinehenrique.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activity.CompraActivity"
+            android:label="@string/title_activity_compra"
+            android:parentActivityName=".activity.MainActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.matheus.magazinehenrique.activity.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

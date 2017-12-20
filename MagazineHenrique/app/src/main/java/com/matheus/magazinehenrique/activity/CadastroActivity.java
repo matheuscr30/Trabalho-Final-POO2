@@ -2,6 +2,7 @@ package com.matheus.magazinehenrique.activity;
 
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -13,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -26,6 +28,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.matheus.magazinehenrique.R;
 import com.matheus.magazinehenrique.config.ConfiguracaoFirebase;
 import com.matheus.magazinehenrique.dao.ClienteDAO;
@@ -78,27 +85,31 @@ public class CadastroActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private Cliente cliente;
 
+    private boolean flagCPF;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro);
 
-        toolbar = (Toolbar)findViewById(R.id.toolbarCadastro);
-        spinnerIdade = (Spinner)findViewById(R.id.spinnerIdadeCadastro);
-        radioGroupGenero = (RadioGroup)findViewById(R.id.radioGroupCadastro);
-        inputLayoutNome = (TextInputLayout)findViewById(R.id.inputLayoutNomeCadastro);
-        inputLayoutCPF = (TextInputLayout)findViewById(R.id.inputLayoutCPFCadastro);
-        inputLayoutEmail = (TextInputLayout)findViewById(R.id.inputLayoutEmailCadastro);
-        inputLayoutSenha = (TextInputLayout)findViewById(R.id.inputLayoutSenhaCadastro);
-        inputLayoutConfirmarSenha = (TextInputLayout)findViewById(R.id.inputLayoutConfirmarSenhaCadastro);
-        inputLayoutTelefone = (TextInputLayout)findViewById(R.id.inputLayoutTelefoneCadastro);
-        inputLayoutCEP = (TextInputLayout)findViewById(R.id.inputLayoutCEPCadastro);
-        inputLayoutEstado = (TextInputLayout)findViewById(R.id.inputLayoutEstadoCadastro);
-        inputLayoutCidade = (TextInputLayout)findViewById(R.id.inputLayoutCidadeCadastro);
-        inputLayoutEndereco = (TextInputLayout)findViewById(R.id.inputLayoutEnderecoCadastro);
-        inputLayoutNumero = (TextInputLayout)findViewById(R.id.inputLayoutNumeroCadastro);
-        inputLayoutComplemento = (TextInputLayout)findViewById(R.id.inputLayoutComplementoCadastro);
-        fabBotaoCadastro = (FloatingActionButton)findViewById(R.id.fabCadastro);
+        firebaseAuth = ConfiguracaoFirebase.getFirebaseAuth();
+
+        toolbar = (Toolbar) findViewById(R.id.toolbarCadastro);
+        spinnerIdade = (Spinner) findViewById(R.id.spinnerIdadeCadastro);
+        radioGroupGenero = (RadioGroup) findViewById(R.id.radioGroupCadastro);
+        inputLayoutNome = (TextInputLayout) findViewById(R.id.inputLayoutNomeCadastro);
+        inputLayoutCPF = (TextInputLayout) findViewById(R.id.inputLayoutCPFCadastro);
+        inputLayoutEmail = (TextInputLayout) findViewById(R.id.inputLayoutEmailCadastro);
+        inputLayoutSenha = (TextInputLayout) findViewById(R.id.inputLayoutSenhaCadastro);
+        inputLayoutConfirmarSenha = (TextInputLayout) findViewById(R.id.inputLayoutConfirmarSenhaCadastro);
+        inputLayoutTelefone = (TextInputLayout) findViewById(R.id.inputLayoutTelefoneCadastro);
+        inputLayoutCEP = (TextInputLayout) findViewById(R.id.inputLayoutCEPCadastro);
+        inputLayoutEstado = (TextInputLayout) findViewById(R.id.inputLayoutEstadoCadastro);
+        inputLayoutCidade = (TextInputLayout) findViewById(R.id.inputLayoutCidadeCadastro);
+        inputLayoutEndereco = (TextInputLayout) findViewById(R.id.inputLayoutEnderecoCadastro);
+        inputLayoutNumero = (TextInputLayout) findViewById(R.id.inputLayoutNumeroCadastro);
+        inputLayoutComplemento = (TextInputLayout) findViewById(R.id.inputLayoutComplementoCadastro);
+        fabBotaoCadastro = (FloatingActionButton) findViewById(R.id.fabCadastro);
 
         configuracaoTela();
 
@@ -112,20 +123,20 @@ public class CadastroActivity extends AppCompatActivity {
         inputLayoutCEP.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
-                if(!hasFocus && validaCep()) chamaViaCep();
+                if (!hasFocus && validaCep()) chamaViaCep();
             }
         });
     }
 
-    private boolean validaCep(){
-        if(inputLayoutCEP.getEditText().getText().toString().equals("") ||
+    private boolean validaCep() {
+        if (inputLayoutCEP.getEditText().getText().toString().equals("") ||
                 inputLayoutCEP.getEditText().getText().toString().length() != 9)
             return false;
         return true;
     }
 
-    private void chamaViaCep(){
-        final ProgressDialog progressDialog = new ProgressDialog( CadastroActivity.this );
+    private void chamaViaCep() {
+        final ProgressDialog progressDialog = new ProgressDialog(CadastroActivity.this);
         progressDialog.setTitle("Carregando");
         progressDialog.setMessage("Aguarde um pouco...");
         progressDialog.setCancelable(false);
@@ -145,6 +156,15 @@ public class CadastroActivity extends AppCompatActivity {
             public void onResponse(Call<RepoCEP> call, retrofit2.Response<RepoCEP> response) {
 
                 RepoCEP repoResponse = response.body();
+
+                if(repoResponse.getCidade() == null){
+                    InputMethodManager inputManager = (InputMethodManager)
+                            getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                            InputMethodManager.HIDE_NOT_ALWAYS);
+                    Snackbar.make(inputLayoutCPF, "CEP não encontrado", Snackbar.LENGTH_SHORT).show();
+                }
+
                 inputLayoutEstado.getEditText().setText(repoResponse.getEstado());
                 inputLayoutCidade.getEditText().setText(repoResponse.getCidade());
                 inputLayoutEndereco.getEditText().setText(repoResponse.getRua());
@@ -155,13 +175,20 @@ public class CadastroActivity extends AppCompatActivity {
             public void onFailure(Call<RepoCEP> call, Throwable t) {
                 t.printStackTrace();
                 progressDialog.dismiss();
+
+                InputMethodManager inputManager = (InputMethodManager)
+                        getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                        InputMethodManager.HIDE_NOT_ALWAYS);
+                Toast.makeText(CadastroActivity.this, "CEP nao encontrado", Toast.LENGTH_LONG).show();
+                Snackbar.make(inputLayoutCPF, "CEP não encontrado", Snackbar.LENGTH_LONG).show();
             }
         });
     }
 
-    private void cadastraCliente(){
+    private void cadastraCliente() {
 
-        if(!validaDados()){
+        if (!validaDados()) {
             return;
         }
 
@@ -173,7 +200,7 @@ public class CadastroActivity extends AppCompatActivity {
         cliente.setIdade(Integer.parseInt(spinnerIdade.getSelectedItem().toString()));
 
         int radioId = radioGroupGenero.getCheckedRadioButtonId();
-        switch (radioId){
+        switch (radioId) {
             case R.id.radioButtonMasculino:
                 cliente.setSexo("M");
                 break;
@@ -190,46 +217,84 @@ public class CadastroActivity extends AppCompatActivity {
         cliente.setComplemento(inputLayoutComplemento.getEditText().getText().toString());
         cliente.setNumero(Integer.parseInt(inputLayoutNumero.getEditText().getText().toString()));
 
-        firebaseAuth = ConfiguracaoFirebase.getFirebaseAuth();
-        firebaseAuth.createUserWithEmailAndPassword(cliente.getEmail(), cliente.getSenha())
-                .addOnCompleteListener(CadastroActivity.this, new OnCompleteListener<AuthResult>() {
+        final ProgressDialog progressDialog = new ProgressDialog(CadastroActivity.this);
+        progressDialog.setTitle("Carregando");
+        progressDialog.setMessage("Aguarde um pouco...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        //Verifica se ja existe o CPF
+        String cpf = Mask.unmask(inputLayoutCPF.getEditText().getText().toString());
+        ConfiguracaoFirebase.getDatabaseReference()
+                .child("usuarios").child(cpf)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            inputLayoutCPF.setErrorEnabled(true);
+                            inputLayoutCPF.setError("CPF já Cadastrado");
+                            Toast.makeText(CadastroActivity.this, "Erro ao efetuar o cadastro!", Toast.LENGTH_LONG).show();
+                            progressDialog.dismiss();
+                        } else {
 
-                        if(task.isSuccessful()) {
-                            ClienteDAO clienteDAO = new ClienteDAO();
-                            if (clienteDAO.salvarCliente(cliente)) {
-                                Toast.makeText(CadastroActivity.this, "Cadastro Realizado com Sucesso", Toast.LENGTH_SHORT).show();
-                                abrirLoginActivity();
-                            }
-                        }
-                        else {
+                            /* Create the Firebase User */
+                            firebaseAuth.createUserWithEmailAndPassword(cliente.getEmail(), cliente.getSenha())
+                                    .addOnCompleteListener(CadastroActivity.this, new OnCompleteListener<AuthResult>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<AuthResult> task) {
 
-                            try{
-                                Log.i("EXCECAO:", task.getException().toString());
-                                throw task.getException();
-                            } catch (FirebaseAuthWeakPasswordException e) {
-                                inputLayoutSenha.setErrorEnabled(true);
-                                inputLayoutSenha.setError("Digite uma senha mais forte, contendo mais caracteres e com letras e números!");
-                            } catch (FirebaseAuthInvalidCredentialsException e) {
-                                inputLayoutEmail.setErrorEnabled(true);
-                                inputLayoutEmail.setError("O e-mail digitado é inválido, digite um novo e-mail!");
-                            } catch (FirebaseAuthUserCollisionException e){
-                                inputLayoutEmail.setErrorEnabled(true);
-                                inputLayoutEmail.setError("Esse e-mail já está em uso!");
-                            } catch (Exception e){
-                                Toast.makeText(CadastroActivity.this, "Erro ao efetuar o cadastro!", Toast.LENGTH_LONG).show();
-                            }
+                                            if (task.isSuccessful()) {
+
+                                                /* Change Display Name */
+                                                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                                        .setDisplayName(cliente.getNome()).build();
+                                                firebaseAuth.getCurrentUser().updateProfile(profileUpdates);
+
+                                                ClienteDAO clienteDAO = new ClienteDAO();
+                                                if (clienteDAO.salvarCliente(cliente, firebaseAuth.getCurrentUser().getUid())) {
+                                                    Toast.makeText(CadastroActivity.this, "Cadastro Realizado com Sucesso", Toast.LENGTH_SHORT).show();
+                                                    abrirLoginActivity();
+                                                }
+
+                                            } else {
+
+                                                try {
+                                                    Log.i("EXCECAO:", task.getException().toString());
+                                                    throw task.getException();
+                                                } catch (FirebaseAuthWeakPasswordException e) {
+                                                    inputLayoutSenha.setErrorEnabled(true);
+                                                    inputLayoutSenha.setError("Digite uma senha mais forte, contendo mais caracteres e com letras e números!");
+                                                } catch (FirebaseAuthInvalidCredentialsException e) {
+                                                    inputLayoutEmail.setErrorEnabled(true);
+                                                    inputLayoutEmail.setError("O e-mail digitado é inválido, digite um novo e-mail!");
+                                                } catch (FirebaseAuthUserCollisionException e) {
+                                                    inputLayoutEmail.setErrorEnabled(true);
+                                                    inputLayoutEmail.setError("Esse e-mail já está em uso!");
+                                                } catch (Exception e) {
+                                                    Toast.makeText(CadastroActivity.this, "Erro ao efetuar o cadastro!", Toast.LENGTH_LONG).show();
+                                                }
+                                            }
+                                            progressDialog.dismiss();
+                                        }
+                                    });
+
                         }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        // Failed to read value
+                        flagCPF = false;
+                        progressDialog.dismiss();
                     }
                 });
     }
 
-    private boolean validaDados(){
+    private boolean validaDados() {
 
         Boolean flag = true;
 
-        if(inputLayoutNome.getEditText().getText().toString().equals("")) {
+        if (inputLayoutNome.getEditText().getText().toString().equals("")) {
             inputLayoutNome.setErrorEnabled(true);
             inputLayoutNome.setError("Preenchimento Obrigatório");
             flag = false;
@@ -239,7 +304,7 @@ public class CadastroActivity extends AppCompatActivity {
 
         String cpf = Mask.unmask(inputLayoutCPF.getEditText().getText().toString());
 
-        if(!ValidaCPF.isCPF(cpf)) {
+        if (!ValidaCPF.isCPF(cpf)) {
             inputLayoutCPF.setErrorEnabled(true);
             inputLayoutCPF.setError("CPF Inválido");
             flag = false;
@@ -247,7 +312,7 @@ public class CadastroActivity extends AppCompatActivity {
             inputLayoutCPF.setErrorEnabled(false);
         }
 
-        if(inputLayoutEmail.getEditText().getText().toString().equals("")){
+        if (inputLayoutEmail.getEditText().getText().toString().equals("")) {
             inputLayoutEmail.setErrorEnabled(true);
             inputLayoutEmail.setError("Preenchimento Obrigatório");
             flag = false;
@@ -255,7 +320,7 @@ public class CadastroActivity extends AppCompatActivity {
             inputLayoutEmail.setErrorEnabled(false);
         }
 
-        if(inputLayoutSenha.getEditText().getText().toString().equals("")){
+        if (inputLayoutSenha.getEditText().getText().toString().equals("")) {
             inputLayoutSenha.setErrorEnabled(true);
             inputLayoutSenha.setError("Preenchimento Obrigatório");
             flag = false;
@@ -263,7 +328,7 @@ public class CadastroActivity extends AppCompatActivity {
             inputLayoutSenha.setErrorEnabled(false);
         }
 
-        if(inputLayoutConfirmarSenha.getEditText().getText().toString().equals("")){
+        if (inputLayoutConfirmarSenha.getEditText().getText().toString().equals("")) {
             inputLayoutConfirmarSenha.setErrorEnabled(true);
             inputLayoutConfirmarSenha.setError("Preenchimento Obrigatório");
             flag = false;
@@ -271,7 +336,7 @@ public class CadastroActivity extends AppCompatActivity {
             inputLayoutConfirmarSenha.setErrorEnabled(false);
         }
 
-        if(!inputLayoutSenha.getEditText().getText().toString().equals(inputLayoutConfirmarSenha.getEditText().getText().toString())){
+        if (!inputLayoutSenha.getEditText().getText().toString().equals(inputLayoutConfirmarSenha.getEditText().getText().toString())) {
             inputLayoutConfirmarSenha.setErrorEnabled(true);
             inputLayoutConfirmarSenha.setError("Senhas Diferentes");
             flag = false;
@@ -279,12 +344,12 @@ public class CadastroActivity extends AppCompatActivity {
             inputLayoutConfirmarSenha.setErrorEnabled(false);
         }
 
-        if(spinnerIdade.getSelectedItem().toString().equals("Idade")){
+        if (spinnerIdade.getSelectedItem().toString().equals("Idade")) {
             Snackbar.make(spinnerIdade, "Não esqueça de selecionar sua idade", Snackbar.LENGTH_SHORT).show();
             flag = false;
         }
 
-        if(inputLayoutTelefone.getEditText().getText().toString().equals("")){
+        if (inputLayoutTelefone.getEditText().getText().toString().equals("")) {
             inputLayoutTelefone.setErrorEnabled(true);
             inputLayoutTelefone.setError("Preenchimento Obrigatório");
             flag = false;
@@ -294,7 +359,7 @@ public class CadastroActivity extends AppCompatActivity {
 
         String cep = Mask.unmask(inputLayoutCEP.getEditText().getText().toString());
 
-        if(cep.equals("")){
+        if (cep.equals("")) {
             inputLayoutCEP.setErrorEnabled(true);
             inputLayoutCEP.setError("Preenchimento Obrigatório");
             flag = false;
@@ -302,7 +367,7 @@ public class CadastroActivity extends AppCompatActivity {
             inputLayoutCEP.setErrorEnabled(false);
         }
 
-        if(inputLayoutEstado.getEditText().getText().toString().equals("")){
+        if (inputLayoutEstado.getEditText().getText().toString().equals("")) {
             inputLayoutEstado.setErrorEnabled(true);
             inputLayoutEstado.setError("Preenchimento Obrigatório");
             flag = false;
@@ -310,7 +375,7 @@ public class CadastroActivity extends AppCompatActivity {
             inputLayoutEstado.setErrorEnabled(false);
         }
 
-        if(inputLayoutCidade.getEditText().getText().toString().equals("")){
+        if (inputLayoutCidade.getEditText().getText().toString().equals("")) {
             inputLayoutCidade.setErrorEnabled(true);
             inputLayoutCidade.setError("Preenchimento Obrigatório");
             flag = false;
@@ -318,7 +383,7 @@ public class CadastroActivity extends AppCompatActivity {
             inputLayoutCidade.setErrorEnabled(false);
         }
 
-        if(inputLayoutEndereco.getEditText().getText().toString().equals("")){
+        if (inputLayoutEndereco.getEditText().getText().toString().equals("")) {
             inputLayoutEndereco.setErrorEnabled(true);
             inputLayoutEndereco.setError("Preenchimento Obrigatório");
             flag = false;
@@ -326,7 +391,7 @@ public class CadastroActivity extends AppCompatActivity {
             inputLayoutEndereco.setErrorEnabled(false);
         }
 
-        if(inputLayoutNumero.getEditText().getText().toString().equals("")){
+        if (inputLayoutNumero.getEditText().getText().toString().equals("")) {
             inputLayoutNumero.setErrorEnabled(true);
             inputLayoutNumero.setError("Preenchimento Obrigatório");
             flag = false;
@@ -337,14 +402,14 @@ public class CadastroActivity extends AppCompatActivity {
         return flag;
     }
 
-    private void configuracaoTela(){
+    private void configuracaoTela() {
         toolbar.setTitle("Cadastro de Usuarios");
         toolbar.setTitleTextColor(getResources().getColor(R.color.corTituloToolbar));
         setSupportActionBar(toolbar);
 
         ArrayList<String> arraylist = new ArrayList<String>();
         arraylist.add("Idade");
-        for(int i = 18; i < 130; i++)
+        for (int i = 18; i < 130; i++)
             arraylist.add(String.valueOf(i));
 
         radioGroupGenero.check(R.id.radioButtonMasculino);
@@ -363,7 +428,7 @@ public class CadastroActivity extends AppCompatActivity {
         spinnerIdade.setAdapter(adapter);
     }
 
-    private void abrirLoginActivity(){
+    private void abrirLoginActivity() {
         Intent intent = new Intent(CadastroActivity.this, LoginActivity.class);
         startActivity(intent);
         finish();

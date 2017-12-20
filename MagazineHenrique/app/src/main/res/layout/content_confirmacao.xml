@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.matheus.magazinehenrique.activity.ConfirmacaoActivity"
+    tools:showIn="@layout/app_bar_confirmacao">
+
+
+    <TextView
+        android:id="@+id/tv_numPedidoConfirmacao"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="40dp"
+        android:text="Pedido 0014712 realizado!"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        android:textSize="25sp" />
+
+
+    <ImageView
+        android:id="@+id/ivVoltarMain"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:src="@drawable/checked" />
+
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:text="Um e-mail com a confirmação do pagamento será enviado em 24 horas"
+        android:textAlignment="center"
+        android:textSize="25sp" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:text="Obrigado pela sua compra!!"
+        android:textAlignment="center"
+        android:textSize="25sp" />
+</LinearLayout>

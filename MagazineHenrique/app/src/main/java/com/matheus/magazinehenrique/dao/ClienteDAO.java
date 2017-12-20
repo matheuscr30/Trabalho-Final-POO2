@@ -18,12 +18,15 @@ public class ClienteDAO {
         this.databaseReference = ConfiguracaoFirebase.getDatabaseReference();
     }
 
-    public boolean salvarCliente(Cliente cliente){
+    public boolean salvarCliente(Cliente cliente, String uid){
         try{
-            Log.i("SHIT", "OQ");
-            databaseReference = databaseReference.child("usuarios")
+            DatabaseReference databaseReferenceAux = databaseReference.child("usuarios")
                     .child(cliente.getCPF());
-            databaseReference.setValue(cliente);
+            databaseReferenceAux.setValue(cliente);
+
+            DatabaseReference databaseReferenceAux2 = databaseReference.child("cpfs")
+                    .child(uid);
+            databaseReferenceAux2.setValue(cliente.getCPF());
             return true;
         } catch (Exception e){
             System.out.println(e);
