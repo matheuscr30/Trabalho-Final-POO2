@@ -1,6 +1,5 @@
 package com.matheus.magazinehenrique.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -8,14 +7,12 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
@@ -32,11 +29,9 @@ import com.matheus.magazinehenrique.model.Produto;
 import com.matheus.magazinehenrique.tools.Preferencias;
 import com.matheus.magazinehenrique.tools.SimpleCallback;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
-public class DetalhesActivity extends AppCompatActivity {
+public class DetalhesProdutoActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private TextView nomeProduto;
@@ -55,9 +50,9 @@ public class DetalhesActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detalhes);
+        setContentView(R.layout.activity_detalhes_produto);
 
-        preferencias = new Preferencias(DetalhesActivity.this);
+        preferencias = new Preferencias(DetalhesProdutoActivity.this);
 
         fotoProduto = (ImageView) findViewById(R.id.imageViewProdutoDetalhes);
         nomeProduto = (TextView) findViewById(R.id.tv_nomeProduto);
@@ -81,7 +76,7 @@ public class DetalhesActivity extends AppCompatActivity {
 
         populateCard(produto);
 
-        Preferencias preferencias = new Preferencias(DetalhesActivity.this);
+        Preferencias preferencias = new Preferencias(DetalhesProdutoActivity.this);
         final String cpfUsuario = preferencias.getCPF();
         fabAdicionarCarrinho.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,7 +162,7 @@ public class DetalhesActivity extends AppCompatActivity {
         StorageReference storageReference = ConfiguracaoFirebase.getFirebaseStorage()
                 .child("images/" + produto.getReferencia() + ".jpg");
 
-        Glide.with(DetalhesActivity.this)
+        Glide.with(DetalhesProdutoActivity.this)
                 .using(new FirebaseImageLoader())
                 .load(storageReference)
                 .into(fotoProduto);
@@ -201,7 +196,7 @@ public class DetalhesActivity extends AppCompatActivity {
     }
 
     public void abrirCarrinhoActivity() {
-        Intent intent = new Intent(DetalhesActivity.this, CarrinhoActivity.class);
+        Intent intent = new Intent(DetalhesProdutoActivity.this, CarrinhoActivity.class);
         startActivity(intent);
     }
 }

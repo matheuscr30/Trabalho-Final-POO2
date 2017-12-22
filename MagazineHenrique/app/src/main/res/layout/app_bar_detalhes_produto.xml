@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.matheus.magazinehenrique.activity.DetalhesActivity">
+    tools:context="com.matheus.magazinehenrique.activity.DetalhesProdutoActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -20,7 +20,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_detalhes" />
+    <include layout="@layout/content_detalhes_produto" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabAdicionarCarrinho"

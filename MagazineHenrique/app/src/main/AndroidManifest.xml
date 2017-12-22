@@ -52,7 +52,7 @@
                 android:value="com.matheus.magazinehenrique.activity.MainActivity" />
         </activity>
         <activity
-            android:name=".activity.DetalhesActivity"
+            android:name=".activity.DetalhesProdutoActivity"
             android:parentActivityName=".activity.MainActivity"
             android:theme="@style/AppTheme">
             <meta-data

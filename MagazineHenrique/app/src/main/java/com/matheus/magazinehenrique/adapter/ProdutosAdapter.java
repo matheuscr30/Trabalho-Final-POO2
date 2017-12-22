@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +14,7 @@ import com.bumptech.glide.Glide;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.storage.StorageReference;
 import com.matheus.magazinehenrique.R;
-import com.matheus.magazinehenrique.activity.DetalhesActivity;
-import com.matheus.magazinehenrique.activity.MainActivity;
+import com.matheus.magazinehenrique.activity.DetalhesProdutoActivity;
 import com.matheus.magazinehenrique.config.ConfiguracaoFirebase;
 import com.matheus.magazinehenrique.model.Produto;
 
@@ -61,7 +59,7 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.Produt
 
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(context, DetalhesActivity.class);
+            Intent intent = new Intent(context, DetalhesProdutoActivity.class);
             intent.putExtra("produto", produtos.get(getAdapterPosition()));
             context.startActivity(intent);
         }
