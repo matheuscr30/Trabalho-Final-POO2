@@ -2,6 +2,7 @@ package com.matheus.magazinehenrique.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +30,7 @@ import com.matheus.magazinehenrique.dao.CarrinhoDAO;
 import com.matheus.magazinehenrique.model.Carrinho;
 import com.matheus.magazinehenrique.model.Produto;
 import com.matheus.magazinehenrique.tools.Preferencias;
+import com.matheus.magazinehenrique.tools.SimpleCallback;
 
 import org.w3c.dom.Text;
 
@@ -43,15 +45,19 @@ public class DetalhesActivity extends AppCompatActivity {
     private TextView tamanhoProduto;
     private TextView descricaoProduto;
     private TextView generoProduto;
+    private TextView estoqueProduto;
     private FloatingActionButton fabAdicionarCarrinho;
-    private DatabaseReference databaseReference;
-
     private ImageView fotoProduto;
+
+    private DatabaseReference databaseReference;
+    private Preferencias preferencias;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalhes);
+
+        preferencias = new Preferencias(DetalhesActivity.this);
 
         fotoProduto = (ImageView) findViewById(R.id.imageViewProdutoDetalhes);
         nomeProduto = (TextView) findViewById(R.id.tv_nomeProduto);
@@ -60,6 +66,7 @@ public class DetalhesActivity extends AppCompatActivity {
         tamanhoProduto = (TextView) findViewById(R.id.tv_tamanhoProduto);
         descricaoProduto = (TextView) findViewById(R.id.tv_descricaoProduto);
         generoProduto = (TextView) findViewById(R.id.tv_generoProduto);
+        estoqueProduto = (TextView) findViewById(R.id.tv_estoqueProduto);
         fabAdicionarCarrinho = (FloatingActionButton) findViewById(R.id.fabAdicionarCarrinho);
 
         toolbar = (Toolbar) findViewById(R.id.toolbarDetalhes);
@@ -80,31 +87,78 @@ public class DetalhesActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                DatabaseReference aux = databaseReference.child("carrinhos/" + cpfUsuario);
-                aux.addListenerForSingleValueEvent(new ValueEventListener() {
+                verificaDisponibilidade(new SimpleCallback<Carrinho>() {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        Carrinho carrinho = dataSnapshot.getValue(Carrinho.class);
-                        if(carrinho == null){
-                            carrinho = new Carrinho();
-                            carrinho.setIdProdutos(new ArrayList<String>());
-                            carrinho.setQtdProdutos(new ArrayList<Integer>());
-                            carrinho.addProduto(produto.getReferencia());
-                        } else {
-                            carrinho.addProduto(produto.getReferencia());
+                    public void callback(Carrinho data) {
+                        //Nao tem Carrinho
+                        if (data == null) {
+                            if (produto.getQuantidadeEstoque() >= 1)
+                                atualizaCarrinho(produto, cpfUsuario);
+                            else
+                                Snackbar.make(fotoProduto, "Produto Esgotado", Snackbar.LENGTH_SHORT).show();
+                            return;
                         }
 
-                        CarrinhoDAO carrinhoDAO = new CarrinhoDAO();
-                        if(carrinhoDAO.atualizarCarrinho(carrinho, cpfUsuario)){
-                            Snackbar.make(fotoProduto, "Produto adicionado ao Carrinho", Snackbar.LENGTH_SHORT).show();
+                        //Tem Carrinho
+                        int indice = data.getIdProdutos().indexOf(produto.getReferencia());
+                        if (indice != -1) { //Tem o produto no carrinho
+                            if (produto.getQuantidadeEstoque() < data.getQtdProdutos().get(indice) + 1)
+                                Snackbar.make(fotoProduto, "Produto Esgotado", Snackbar.LENGTH_SHORT).show();
+                            else
+                                atualizaCarrinho(produto, cpfUsuario);
+                        } else { //Nao Tem o produtor no carrinho
+                            if (produto.getQuantidadeEstoque() >= 1)
+                                atualizaCarrinho(produto, cpfUsuario);
+                            else
+                                Snackbar.make(fotoProduto, "Produto Esgotado", Snackbar.LENGTH_SHORT).show();
                         }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
                     }
                 });
+            }
+        });
+    }
+
+    private void atualizaCarrinho(final Produto produto, final String cpfUsuario) {
+        DatabaseReference aux = databaseReference.child("carrinhos/" + cpfUsuario);
+        aux.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Carrinho carrinho = dataSnapshot.getValue(Carrinho.class);
+                if (carrinho == null) {
+                    carrinho = new Carrinho();
+                    carrinho.setIdProdutos(new ArrayList<String>());
+                    carrinho.setQtdProdutos(new ArrayList<Integer>());
+                    carrinho.addProduto(produto.getReferencia());
+                } else {
+                    carrinho.addProduto(produto.getReferencia());
+                }
+
+                CarrinhoDAO carrinhoDAO = new CarrinhoDAO();
+                if (carrinhoDAO.atualizarCarrinho(carrinho, cpfUsuario)) {
+                    Snackbar.make(fotoProduto, "Produto adicionado ao Carrinho", Snackbar.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void verificaDisponibilidade(@NonNull final SimpleCallback<Carrinho> finishedCallback) {
+
+        DatabaseReference aux = databaseReference.child("carrinhos").child(preferencias.getCPF());
+        aux.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Carrinho carrinho = dataSnapshot.getValue(Carrinho.class);
+                finishedCallback.callback(carrinho);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
     }
@@ -124,6 +178,7 @@ public class DetalhesActivity extends AppCompatActivity {
         tamanhoProduto.setText(produto.getTamanho());
         descricaoProduto.setText(produto.getDescricao());
         generoProduto.setText(produto.getGenero());
+        estoqueProduto.setText(produto.getStatus());
     }
 
     @Override

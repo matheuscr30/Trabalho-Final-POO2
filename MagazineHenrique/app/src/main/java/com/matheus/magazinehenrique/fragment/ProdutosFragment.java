@@ -24,8 +24,10 @@ import com.matheus.magazinehenrique.activity.MainActivity;
 import com.matheus.magazinehenrique.adapter.CarrinhoAdapter;
 import com.matheus.magazinehenrique.adapter.ProdutosAdapter;
 import com.matheus.magazinehenrique.config.ConfiguracaoFirebase;
+import com.matheus.magazinehenrique.dao.ProdutoDAO;
 import com.matheus.magazinehenrique.model.Categoria;
 import com.matheus.magazinehenrique.model.Produto;
+import com.matheus.magazinehenrique.tools.SimpleCallback;
 
 import java.util.ArrayList;
 
@@ -80,12 +82,17 @@ public class ProdutosFragment extends Fragment {
                 for (DataSnapshot dados : dataSnapshot.getChildren()) {
 
                     Produto produto = dados.getValue(Produto.class);
+
                     String genero = produto.getGenero();
                     if (genero.equals("masculino")) {
                         produto.setGenero("M" + genero.substring(1));
                     } else if (genero.equals("feminino")) {
                         produto.setGenero("F" + genero.substring(1));
                     }
+
+                    String status = produto.getStatus();
+                    produto.iniciaProduto();
+
                     produtos.add(produto);
                 }
 
@@ -111,7 +118,18 @@ public class ProdutosFragment extends Fragment {
         }
     }
 
+    //MESMO PROBLEMA DAS COMPRAS
     public void buscaPorNome(final String nome){
+        /*final ProdutoDAO produtoDAO = new ProdutoDAO();
+        produtoDAO.buscarProdutoPorNome(nome, new SimpleCallback<ArrayList<Produto>>() {
+            @Override
+            public void callback(ArrayList<Produto> data) {
+                produtos.clear();
+                produtos = data;
+                adapter.notifyDataSetChanged();
+            }
+        });*/
+
         valueEventListenerProcura = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

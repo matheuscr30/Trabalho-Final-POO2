@@ -1,5 +1,6 @@
 package com.matheus.magazinehenrique.dao;
 
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.widget.Toast;
 
@@ -12,6 +13,7 @@ import com.matheus.magazinehenrique.config.ConfiguracaoFirebase;
 import com.matheus.magazinehenrique.model.Carrinho;
 import com.matheus.magazinehenrique.model.Cliente;
 import com.matheus.magazinehenrique.model.Produto;
+import com.matheus.magazinehenrique.tools.SimpleCallback;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,6 +68,26 @@ public class CarrinhoDAO {
         } catch (Exception e){
             System.out.println(e);
             return false;
+        }
+    }
+
+    public void buscarCarrinho(String cpfUsuario, @NonNull final SimpleCallback<Carrinho> finishedCallback){
+        try{
+            DatabaseReference aux = databaseReference.child("carrinhos").child(cpfUsuario);
+            aux.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Carrinho carrinho = dataSnapshot.getValue(Carrinho.class);
+                    finishedCallback.callback(carrinho);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        } catch (Exception e){
+
         }
     }
 }

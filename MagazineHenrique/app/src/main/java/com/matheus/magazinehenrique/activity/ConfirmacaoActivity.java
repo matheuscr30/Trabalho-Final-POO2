@@ -8,17 +8,24 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ButtonBarLayout;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.matheus.magazinehenrique.R;
+import com.matheus.magazinehenrique.dao.ProdutoDAO;
+import com.matheus.magazinehenrique.model.Produto;
+
+import java.util.ArrayList;
 
 public class ConfirmacaoActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private TextView numPedido;
     private ImageView btnVoltarMain;
+
+    private ArrayList<Produto> produtos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +41,11 @@ public class ConfirmacaoActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Bundle bundle = getIntent().getExtras();
+        produtos = (ArrayList)bundle.get("produtos");
         numPedido.setText("Pedido " + bundle.getString("key") + " realizado");
+
+        ProdutoDAO produtoDAO = new ProdutoDAO();
+        produtoDAO.atualizarProdutos(produtos);
 
         btnVoltarMain.setOnClickListener(new View.OnClickListener() {
             @Override

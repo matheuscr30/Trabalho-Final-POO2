@@ -20,7 +20,9 @@ import com.matheus.magazinehenrique.R;
 import com.matheus.magazinehenrique.activity.MainActivity;
 import com.matheus.magazinehenrique.adapter.CategoriasAdapter;
 import com.matheus.magazinehenrique.config.ConfiguracaoFirebase;
+import com.matheus.magazinehenrique.dao.CategoriaDAO;
 import com.matheus.magazinehenrique.model.Categoria;
+import com.matheus.magazinehenrique.tools.SimpleCallback;
 
 import java.util.ArrayList;
 
@@ -53,6 +55,16 @@ public class CategoriasFragment extends Fragment{
         listView = (ListView)view.findViewById(R.id.lv_categorias);
         adapter = new CategoriasAdapter(getActivity(), categorias);
         listView.setAdapter(adapter);
+
+        /*CategoriaDAO categoriaDAO = new CategoriaDAO();
+        categoriaDAO.buscarCategorias(new SimpleCallback<ArrayList<Categoria>>() {
+            @Override
+            public void callback(ArrayList<Categoria> data) {
+                categorias.clear();
+                categorias = data;
+                adapter.notifyDataSetChanged();
+            }
+        });*/
 
         databaseReference = ConfiguracaoFirebase.getDatabaseReference()
                 .child("categorias");

@@ -40,6 +40,7 @@ import com.matheus.magazinehenrique.cupons.CupomSaia;
 import com.matheus.magazinehenrique.cupons.CupomVestido;
 import com.matheus.magazinehenrique.cupons.IdCupom;
 import com.matheus.magazinehenrique.dao.CarrinhoDAO;
+import com.matheus.magazinehenrique.dao.ClienteDAO;
 import com.matheus.magazinehenrique.dao.CompraDAO;
 import com.matheus.magazinehenrique.fretes.Frete;
 import com.matheus.magazinehenrique.fretes.FretePAC;
@@ -47,10 +48,12 @@ import com.matheus.magazinehenrique.fretes.FreteSedex;
 import com.matheus.magazinehenrique.model.Cartao;
 import com.matheus.magazinehenrique.model.Cliente;
 import com.matheus.magazinehenrique.model.Compra;
+import com.matheus.magazinehenrique.model.Produto;
 import com.matheus.magazinehenrique.pedidos.Pedido;
 import com.matheus.magazinehenrique.pedidos.PedidoBoleto;
 import com.matheus.magazinehenrique.pedidos.PedidoCartao;
 import com.matheus.magazinehenrique.tools.Preferencias;
+import com.matheus.magazinehenrique.tools.SimpleCallback;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -80,6 +83,7 @@ public class PagamentoActivity extends AppCompatActivity {
     private Button btnPagar;
     private int numParcelas;
 
+    private ArrayList<Produto>produtos;
     private ArrayList<String>idProdutos;
     private ArrayList<Integer>qtdProdutos;
     private Cartao cartao;
@@ -152,6 +156,7 @@ public class PagamentoActivity extends AppCompatActivity {
         databaseReference = ConfiguracaoFirebase.getDatabaseReference();
 
         Bundle bundle = getIntent().getExtras();
+        produtos = (ArrayList)bundle.get("produtos");
         idProdutos = bundle.getStringArrayList("idProdutos");
         qtdProdutos = bundle.getIntegerArrayList("qtdProdutos");
         String cupom = bundle.getString("cupom");
@@ -175,11 +180,10 @@ public class PagamentoActivity extends AppCompatActivity {
         DatabaseReference databaseReferenceAux =
                 databaseReference.child("usuarios/" + cpfUsuario);
 
-        databaseReferenceAux.addListenerForSingleValueEvent(new ValueEventListener() {
+        ClienteDAO clienteDAO = new ClienteDAO();
+        clienteDAO.buscarCliente(cpfUsuario, new SimpleCallback<Cliente>() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Cliente cliente = dataSnapshot.getValue(Cliente.class);
-
+            public void callback(Cliente cliente) {
                 nomeCliente.setText(cliente.getNome());
                 enderecoCliente.setText(cliente.getEndereco() + ", " + cliente.getNumero());
                 cidadeCliente.setText(cliente.getCidade() + ", " + cliente.getEstado());
@@ -188,11 +192,6 @@ public class PagamentoActivity extends AppCompatActivity {
                 subTotalResumo.setText("R$ " + precoSubtotalGlobal);
 
                 Calculate();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
             }
         });
     }
@@ -224,7 +223,10 @@ public class PagamentoActivity extends AppCompatActivity {
         }
 
         double precoDouble = Double.parseDouble(precoSubtotalGlobal), precoTotal = precoDouble, precoFrete;
-        pedido.processar(idCupom, precoDouble, numParcelas);
+        boolean statusPedido = pedido.processar(idCupom, precoDouble, numParcelas, produtos, idProdutos, qtdProdutos);
+
+        if(!statusPedido)
+            Toast.makeText(PagamentoActivity.this, "Erro ao Processar seu Pedido", Toast.LENGTH_SHORT).show();
 
         precoTotal = pedido.getPrecoTotal();
         precoFrete = pedido.calcularFrete();
@@ -333,7 +335,10 @@ public class PagamentoActivity extends AppCompatActivity {
 
         ivFecharInformacoesCartao.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {mBottomSheetDialog.dismiss();
+            public void onClick(View view) {
+                mBottomSheetDialog.dismiss();
+                dialogPrincipal.dismiss();
+                opcaoPagamento.setText("Boleto");
             }
         });
 
@@ -512,6 +517,7 @@ public class PagamentoActivity extends AppCompatActivity {
             Toast.makeText(PagamentoActivity.this, "Erro no Sistema", Toast.LENGTH_SHORT).show();
 
         Intent intent = new Intent(PagamentoActivity.this, ConfirmacaoActivity.class);
+        intent.putExtra("produtos", produtos);
         intent.putExtra("key", key);
         startActivity(intent);
 

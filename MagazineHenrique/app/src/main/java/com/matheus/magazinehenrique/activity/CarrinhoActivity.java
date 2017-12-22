@@ -31,11 +31,15 @@ import com.google.firebase.database.ValueEventListener;
 import com.matheus.magazinehenrique.R;
 import com.matheus.magazinehenrique.adapter.CarrinhoAdapter;
 import com.matheus.magazinehenrique.config.ConfiguracaoFirebase;
+import com.matheus.magazinehenrique.dao.CarrinhoDAO;
+import com.matheus.magazinehenrique.dao.ProdutoDAO;
 import com.matheus.magazinehenrique.model.Carrinho;
 import com.matheus.magazinehenrique.model.Categoria;
 import com.matheus.magazinehenrique.model.Produto;
 import com.matheus.magazinehenrique.tools.Preferencias;
+import com.matheus.magazinehenrique.tools.SimpleCallback;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -98,33 +102,20 @@ public class CarrinhoActivity extends AppCompatActivity {
         String cpfUsuario = preferencias.getCPF();
         databaseReference = ConfiguracaoFirebase.getDatabaseReference();
         DatabaseReference aux = databaseReference.child("carrinhos/" + cpfUsuario + "/");
-        valueEventListenerProdutos = new ValueEventListener() {
+
+        CarrinhoDAO carrinhoDAO = new CarrinhoDAO();
+        carrinhoDAO.buscarCarrinho(cpfUsuario, new SimpleCallback<Carrinho>() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                //Limpar lista
-                produtos.clear();
-                idProdutos.clear();
-                qtdProdutosInt.clear();
-                final Carrinho carrinho = dataSnapshot.getValue(Carrinho.class);
-
-                DatabaseReference aux2 = databaseReference.child("produtos");
-                aux2.addListenerForSingleValueEvent(new ValueEventListener() {
+            public void callback(final Carrinho carrinho) {
+                ProdutoDAO produtoDAO = new ProdutoDAO();
+                produtoDAO.buscarProdutos(new SimpleCallback<ArrayList<Produto>>() {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        //Listar Produtos do Usuario
-                        ArrayList<Produto> produtosAux = new ArrayList<>();
-                        for (DataSnapshot dados : dataSnapshot.getChildren()) {
+                    public void callback(ArrayList<Produto> produtosAux) {
 
-                            Produto produto = dados.getValue(Produto.class);
-                            String genero = produto.getGenero();
-                            if (genero.equals("masculino")) {
-                                produto.setGenero("M" + genero.substring(1));
-                            } else if (genero.equals("feminino")) {
-                                produto.setGenero("F" + genero.substring(1));
-                            }
-                            produtosAux.add(produto);
-                        }
+                        //Limpar lista
+                        produtos.clear();
+                        idProdutos.clear();
+                        qtdProdutosInt.clear();
 
                         if (carrinho != null) {
                             ArrayList<String> idProdutosCarrinho = carrinho.getIdProdutos();
@@ -141,20 +132,9 @@ public class CarrinhoActivity extends AppCompatActivity {
                             adapter.notifyDataSetChanged();
                         }
                     }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
                 });
             }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        };
-        aux.addValueEventListener(valueEventListenerProdutos);
+        });
     }
 
     public void calculaPrecoTotal(ArrayList<Produto>produtos, ArrayList<Integer>qtdProdutos){
@@ -173,6 +153,7 @@ public class CarrinhoActivity extends AppCompatActivity {
         Intent intent = new Intent(CarrinhoActivity.this, PagamentoActivity.class);
         intent.putExtra("cupom", codigoCupom.getText().toString());
         intent.putExtra("preco", precoTotal.getText().toString().substring(3));
+        intent.putExtra("produtos", produtos);
         intent.putStringArrayListExtra("idProdutos", idProdutos);
         intent.putIntegerArrayListExtra("qtdProdutos", qtdProdutosInt);
         startActivityForResult(intent, 1);

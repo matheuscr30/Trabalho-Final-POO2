@@ -37,9 +37,9 @@ import java.util.ArrayList;
 
 public class CarrinhoAdapter extends RecyclerView.Adapter<CarrinhoAdapter.CarrinhoViewHolder> {
 
-    private ArrayList<Produto>produtos;
-    private ArrayList<String>idProdutos;
-    private ArrayList<Integer>qtdProdutosInt;
+    private ArrayList<Produto> produtos;
+    private ArrayList<String> idProdutos;
+    private ArrayList<Integer> qtdProdutosInt;
     private Context context;
     private CarrinhoDAO carrinhoDAO;
 
@@ -69,7 +69,7 @@ public class CarrinhoAdapter extends RecyclerView.Adapter<CarrinhoAdapter.Carrin
         holder.quantidade.setText(String.valueOf(qtdProdutosInt.get(position)));
 
         StorageReference storageReference = ConfiguracaoFirebase.getFirebaseStorage()
-                .child("images/"+produtos.get(position).getReferencia()+".jpg");
+                .child("images/" + produtos.get(position).getReferencia() + ".jpg");
 
         Glide.with(context)
                 .using(new FirebaseImageLoader())
@@ -87,11 +87,16 @@ public class CarrinhoAdapter extends RecyclerView.Adapter<CarrinhoAdapter.Carrin
         super.onAttachedToRecyclerView(recyclerView);
     }
 
-    public void aumentaQtdProduto(int position){
+    public void aumentaQtdProduto(int position) {
 
-        try{
+        try {
             int num = qtdProdutosInt.get(position);
-            qtdProdutosInt.set(position, num+1);
+            if (num + 1 > produtos.get(position).getQuantidadeEstoque()) {
+                Toast.makeText(context, "Não há produto suficiente em estoque", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            qtdProdutosInt.set(position, num + 1);
 
             Preferencias preferencias = new Preferencias(context);
             String cpfUsuario = preferencias.getCPF();
@@ -102,37 +107,41 @@ public class CarrinhoAdapter extends RecyclerView.Adapter<CarrinhoAdapter.Carrin
 
             carrinhoDAO.atualizarCarrinho(carrinho, cpfUsuario);
 
-            ((CarrinhoActivity)context).calculaPrecoTotal(produtos, qtdProdutosInt);
+            ((CarrinhoActivity) context).calculaPrecoTotal(produtos, qtdProdutosInt);
             notifyDataSetChanged();
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
-    public void abaixaQtdProduto(int position){
+    public void abaixaQtdProduto(int position) {
 
-        int num = qtdProdutosInt.get(position);
-        if(num <= 1){
-            Toast.makeText(context, "Mínimo de 1 unidade", Toast.LENGTH_SHORT).show();
-            return;
+        try {
+            int num = qtdProdutosInt.get(position);
+            if (num <= 1) {
+                Toast.makeText(context, "Mínimo de 1 unidade", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            qtdProdutosInt.set(position, num - 1);
+
+            Preferencias preferencias = new Preferencias(context);
+            String cpfUsuario = preferencias.getCPF();
+
+            Carrinho carrinho = new Carrinho();
+            carrinho.setIdProdutos(idProdutos);
+            carrinho.setQtdProdutos(qtdProdutosInt);
+
+            carrinhoDAO.atualizarCarrinho(carrinho, cpfUsuario);
+
+            ((CarrinhoActivity) context).calculaPrecoTotal(produtos, qtdProdutosInt);
+            notifyDataSetChanged();
+        } catch (Exception e) {
+            e.getMessage();
         }
-
-        qtdProdutosInt.set(position, num - 1);
-
-        Preferencias preferencias = new Preferencias(context);
-        String cpfUsuario = preferencias.getCPF();
-
-        Carrinho carrinho = new Carrinho();
-        carrinho.setIdProdutos(idProdutos);
-        carrinho.setQtdProdutos(qtdProdutosInt);
-
-        carrinhoDAO.atualizarCarrinho(carrinho, cpfUsuario);
-
-        ((CarrinhoActivity)context).calculaPrecoTotal(produtos, qtdProdutosInt);
-        notifyDataSetChanged();
     }
 
-    public void deletaProduto(int position){
+    public void deletaProduto(int position) {
 
         qtdProdutosInt.remove(position);
         idProdutos.remove(position);
@@ -148,17 +157,17 @@ public class CarrinhoAdapter extends RecyclerView.Adapter<CarrinhoAdapter.Carrin
         carrinhoDAO.removeCarrinho(cpfUsuario);
         carrinhoDAO.salvarCarrinho(carrinho, cpfUsuario);
 
-        ((CarrinhoActivity)context).calculaPrecoTotal(produtos, qtdProdutosInt);
+        ((CarrinhoActivity) context).calculaPrecoTotal(produtos, qtdProdutosInt);
         notifyDataSetChanged();
     }
 
-    public void detalharProduto(int position){
+    public void detalharProduto(int position) {
         Intent intent = new Intent(context, DetalhesActivity.class);
         intent.putExtra("produto", produtos.get(position));
         context.startActivity(intent);
     }
 
-    public static class CarrinhoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public static class CarrinhoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public CardView cv;
         public TextView nome;
@@ -175,11 +184,11 @@ public class CarrinhoAdapter extends RecyclerView.Adapter<CarrinhoAdapter.Carrin
         private CarrinhoDAO carrinhoDAO;
         private CarrinhoAdapter adapter;
 
-        public interface OnIncrementListener{
+        public interface OnIncrementListener {
             void onNumberIncremented();
         }
 
-        public CarrinhoViewHolder(View itemView, Context context, CarrinhoAdapter adapter){
+        public CarrinhoViewHolder(View itemView, Context context, CarrinhoAdapter adapter) {
             super(itemView);
 
             carrinhoDAO = new CarrinhoDAO();
@@ -187,16 +196,16 @@ public class CarrinhoAdapter extends RecyclerView.Adapter<CarrinhoAdapter.Carrin
             this.context = context;
             this.adapter = adapter;
 
-            cv = (CardView)itemView.findViewById(R.id.cvCarrinho);
-            nome = (TextView)itemView.findViewById(R.id.tv_nomeProduto);
-            tamanho = (TextView)itemView.findViewById(R.id.tv_tamanhoProduto);
-            preco = (TextView)itemView.findViewById(R.id.tv_precoProduto);
-            fotoProduto = (ImageView)itemView.findViewById(R.id.imageViewProdutoCarrinho);
-            linearLayoutCima = (LinearLayout)itemView.findViewById(R.id.linearLayoutCimaCarrinho);
-            quantidade = (TextView)itemView.findViewById(R.id.tv_quantidade);
-            btnMais = (ImageView)itemView.findViewById(R.id.imageViewMais);
-            btnMenos = (ImageView)itemView.findViewById(R.id.imageViewMenos);
-            btnDelete = (ImageView)itemView.findViewById(R.id.imageViewDelete);
+            cv = (CardView) itemView.findViewById(R.id.cvCarrinho);
+            nome = (TextView) itemView.findViewById(R.id.tv_nomeProduto);
+            tamanho = (TextView) itemView.findViewById(R.id.tv_tamanhoProduto);
+            preco = (TextView) itemView.findViewById(R.id.tv_precoProduto);
+            fotoProduto = (ImageView) itemView.findViewById(R.id.imageViewProdutoCarrinho);
+            linearLayoutCima = (LinearLayout) itemView.findViewById(R.id.linearLayoutCimaCarrinho);
+            quantidade = (TextView) itemView.findViewById(R.id.tv_quantidade);
+            btnMais = (ImageView) itemView.findViewById(R.id.imageViewMais);
+            btnMenos = (ImageView) itemView.findViewById(R.id.imageViewMenos);
+            btnDelete = (ImageView) itemView.findViewById(R.id.imageViewDelete);
 
             btnMais.setOnClickListener(this);
             btnMenos.setOnClickListener(this);
@@ -206,7 +215,7 @@ public class CarrinhoAdapter extends RecyclerView.Adapter<CarrinhoAdapter.Carrin
 
         @Override
         public void onClick(View view) {
-            switch (view.getId()){
+            switch (view.getId()) {
                 case R.id.imageViewMais:
                     adapter.aumentaQtdProduto(getAdapterPosition());
                     break;

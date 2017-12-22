@@ -1,5 +1,11 @@
 package com.matheus.magazinehenrique.model;
 
+import com.google.firebase.database.Exclude;
+import com.matheus.magazinehenrique.estoque.StateAcabando;
+import com.matheus.magazinehenrique.estoque.StateDisponivel;
+import com.matheus.magazinehenrique.estoque.StateEsgotado;
+import com.matheus.magazinehenrique.estoque.StateEstoque;
+
 import java.io.Serializable;
 
 /**
@@ -16,9 +22,34 @@ public class Produto implements Serializable{
     private String genero;
     private String tamanho;
     private String preco;
+    private int quantidadeEstoque;
+    private String status;
+    @Exclude
+    private StateEstoque stateEstoque;
 
     public Produto() {
 
+    }
+
+    @Exclude
+    public void iniciaProduto(){
+        if(status.equals("Disponível")){
+            stateEstoque = new StateDisponivel(this);
+        } else if(status.equals("Esgotado")){
+            stateEstoque = new StateEsgotado(this);
+        } else if(status.equals("Acabando")){
+            stateEstoque = new StateAcabando(this);
+        }
+    }
+
+    @Exclude
+    public void retiraDoEstoque(int qtd) {
+        stateEstoque.retiraDoEstoque(qtd);
+    }
+
+    @Exclude
+    public void adicionaNoEstoque(int qtd) {
+        stateEstoque.adicionaNoEstoque(qtd);
     }
 
     public String getReferencia() {
@@ -83,5 +114,31 @@ public class Produto implements Serializable{
 
     public void setGenero(String genero) {
         this.genero = genero;
+    }
+
+    public int getQuantidadeEstoque() {
+        return quantidadeEstoque;
+    }
+
+    public void setQuantidadeEstoque(int quantidadeEstoque) {
+        this.quantidadeEstoque = quantidadeEstoque;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    @Exclude
+    public StateEstoque getStateEstoque() {
+        return stateEstoque;
+    }
+
+    @Exclude
+    public void setStateEstoque(StateEstoque stateEstoque) {
+        this.stateEstoque = stateEstoque;
     }
 }

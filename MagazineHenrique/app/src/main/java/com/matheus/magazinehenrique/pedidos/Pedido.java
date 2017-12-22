@@ -1,8 +1,13 @@
 package com.matheus.magazinehenrique.pedidos;
 
+import com.google.firebase.database.DatabaseReference;
+import com.matheus.magazinehenrique.config.ConfiguracaoFirebase;
 import com.matheus.magazinehenrique.cupons.Cupom;
 import com.matheus.magazinehenrique.cupons.IdCupom;
 import com.matheus.magazinehenrique.fretes.Frete;
+import com.matheus.magazinehenrique.model.Produto;
+
+import java.util.ArrayList;
 
 /**
  * Created by matheus on 17/12/17.
@@ -19,9 +24,11 @@ public abstract class Pedido {
         this.frete = frete;
     }
 
-    public final boolean processar(IdCupom idCupom, double preco, int numParcelas) {
+    public final boolean processar(IdCupom idCupom, double preco, int numParcelas, ArrayList<Produto>produtos,
+                                   ArrayList<String>idProdutos, ArrayList<Integer>qtdProdutos) {
         precoTotal = preco;
-        if (verificarEstoque() == false) {
+        if (verificarEstoque(produtos, idProdutos, qtdProdutos) == false) {
+            System.out.println("ne possivel");
             return false;
         }
 
@@ -37,6 +44,7 @@ public abstract class Pedido {
         precoTotal += operacaoTipoPagamento();
 
         compraParcelada(numParcelas);
+        finalizarCompra();
         return true;
     }
 
@@ -46,9 +54,19 @@ public abstract class Pedido {
         return true;
     }
 
-    public final boolean verificarEstoque() {
-        //if (estoqueSuficiente()) return true;
-        //else return false;
+    public final boolean verificarEstoque(ArrayList<Produto>produtos, ArrayList<String>idProdutos,
+                                          ArrayList<Integer>qtdProdutos) {
+
+        for(int i = 0; i < produtos.size(); i++){
+            if(produtos.get(i).getQuantidadeEstoque() < qtdProdutos.get(i)) {
+                System.out.println(produtos.get(i).getQuantidadeEstoque() + " " + qtdProdutos.get(i));
+                return false;
+            }
+        }
+
+        for(int i = 0; i < produtos.size(); i++){
+            produtos.get(i).retiraDoEstoque(qtdProdutos.get(i));
+        }
         return true;
     }
 

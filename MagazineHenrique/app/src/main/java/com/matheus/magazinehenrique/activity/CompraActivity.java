@@ -31,11 +31,13 @@ import com.matheus.magazinehenrique.R;
 import com.matheus.magazinehenrique.adapter.CarrinhoAdapter;
 import com.matheus.magazinehenrique.adapter.CompraAdapter;
 import com.matheus.magazinehenrique.config.ConfiguracaoFirebase;
+import com.matheus.magazinehenrique.dao.CompraDAO;
 import com.matheus.magazinehenrique.fragment.ProdutosFragment;
 import com.matheus.magazinehenrique.model.Carrinho;
 import com.matheus.magazinehenrique.model.Compra;
 import com.matheus.magazinehenrique.model.Produto;
 import com.matheus.magazinehenrique.tools.Preferencias;
+import com.matheus.magazinehenrique.tools.SimpleCallback;
 
 import java.util.ArrayList;
 
@@ -86,6 +88,20 @@ public class CompraActivity extends AppCompatActivity
         //Listener para recuperar contatos
         Preferencias preferencias = new Preferencias(CompraActivity.this);
         String cpfUsuario = preferencias.getCPF();
+
+        /*CompraDAO compraDAO = new CompraDAO();
+        compraDAO.buscarCompras(cpfUsuario, new SimpleCallback<ArrayList<Compra>>() {
+            @Override
+            public void callback(ArrayList<Compra> data) {
+
+                compras.clear();
+                compras = data;
+                System.out.println(compras.get(0).getChave());
+                adapter.notifyDataSetChanged();
+            }
+        });*/
+
+
         databaseReference = ConfiguracaoFirebase.getDatabaseReference();
         DatabaseReference aux = databaseReference.child("compras/" + cpfUsuario + "/");
         valueEventListenerCompras = new ValueEventListener() {
