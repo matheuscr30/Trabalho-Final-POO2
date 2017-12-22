@@ -1,6 +1,7 @@
 package com.matheus.magazinehenrique.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.matheus.magazinehenrique.R;
+import com.matheus.magazinehenrique.activity.DetalhesCompraActivity;
 import com.matheus.magazinehenrique.model.Compra;
 
 import java.text.SimpleDateFormat;
@@ -52,8 +54,10 @@ public class CompraAdapter extends RecyclerView.Adapter<CompraAdapter.CompraView
         return compras.size();
     }
 
-    void detalharCompra(){
-
+    void detalharCompra(int position){
+        Intent intent = new Intent(context, DetalhesCompraActivity.class);
+        intent.putExtra("compra", compras.get(position));
+        context.startActivity(intent);
     }
 
     @Override
@@ -76,13 +80,9 @@ public class CompraAdapter extends RecyclerView.Adapter<CompraAdapter.CompraView
         public void onClick(View view) {
             switch (view.getId()){
                 case R.id.btnDetalhesCompra:
-                    adapter.detalharCompra();
+                    adapter.detalharCompra(getAdapterPosition());
                     break;
             }
-        }
-
-        public interface OnIncrementListener {
-            void onNumberIncremented();
         }
 
         public CompraViewHolder(View itemView, Context context, CompraAdapter adapter) {

@@ -86,6 +86,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.matheus.magazinehenrique.activity.MainActivity" />
         </activity>
+        <activity android:name=".activity.DetalhesCompraActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.matheus.magazinehenrique.activity.CompraActivity" />
+        </activity>
     </application>
 
 </manifest>

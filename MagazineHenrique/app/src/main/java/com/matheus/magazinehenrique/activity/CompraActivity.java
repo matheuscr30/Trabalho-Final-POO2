@@ -26,6 +26,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.matheus.magazinehenrique.R;
 import com.matheus.magazinehenrique.adapter.CarrinhoAdapter;
@@ -40,6 +41,7 @@ import com.matheus.magazinehenrique.tools.Preferencias;
 import com.matheus.magazinehenrique.tools.SimpleCallback;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class CompraActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -103,7 +105,7 @@ public class CompraActivity extends AppCompatActivity
 
 
         databaseReference = ConfiguracaoFirebase.getDatabaseReference();
-        DatabaseReference aux = databaseReference.child("compras/" + cpfUsuario + "/");
+        Query query1 = databaseReference.child("compras/" + cpfUsuario + "/").orderByChild("date");
         valueEventListenerCompras = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -115,6 +117,7 @@ public class CompraActivity extends AppCompatActivity
                     Compra compra = dados.getValue(Compra.class);
                     compras.add(compra);
                 }
+                Collections.reverse(compras);
                 adapter.notifyDataSetChanged();
             }
 
@@ -123,7 +126,7 @@ public class CompraActivity extends AppCompatActivity
 
             }
         };
-        aux.addValueEventListener(valueEventListenerCompras);
+        query1.addValueEventListener(valueEventListenerCompras);
     }
 
     public void configNavigationDrawer(){

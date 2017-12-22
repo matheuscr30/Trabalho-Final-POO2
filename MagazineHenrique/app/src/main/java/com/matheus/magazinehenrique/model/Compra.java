@@ -1,5 +1,6 @@
 package com.matheus.magazinehenrique.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -7,13 +8,12 @@ import java.util.Date;
  * Created by matheus on 20/12/17.
  */
 
-public class Compra {
+public class Compra implements Serializable{
     ArrayList<String> idProdutos;
     ArrayList<Integer> qtdProdutos;
     Date data;
     String valorTotal;
     String chave;
-    String status;
 
     public Compra() {
 
@@ -57,13 +57,5 @@ public class Compra {
 
     public void setQtdProdutos(ArrayList<Integer> qtdProdutos) {
         this.qtdProdutos = qtdProdutos;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 }
