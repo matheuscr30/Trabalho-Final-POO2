@@ -8,76 +8,125 @@
     <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/4.8.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.8.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.8.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.8.0/firebase-storage.js"></script>
+
+    <script type="text/javascript">
+
+    $(document).ready(function () {
+
+        var config = {
+            apiKey: "AIzaSyDRO0v4ECRRExuIyzv-txSpftBrAhz2aXY",
+            authDomain: "loja-4b018.firebaseapp.com",
+            databaseURL: "https://loja-4b018.firebaseio.com",
+            projectId: "loja-4b018",
+            storageBucket: "loja-4b018.appspot.com",
+            messagingSenderId: "29912178661"
+        };
+        firebase.initializeApp(config);
+
+        $('#btnCadastrar').click(function () {
+
+            var key = firebase.database().ref('produtos').push().key;
+
+            var nome = $('#nome').val();
+            var referencia = key;
+            var descricao = $('#descricao').val();
+            var cor = $('#cor').val();
+            var tamanho = $('#tamanho').val();
+            var tipo = $('#tipo').val();
+            var preco = $('#preco').val();
+            var genero = $('#genero').val();
+
+            input = document.getElementById('fotoProduto');
+            if (!input.files[0]) {
+                alert("Please select a file before clicking 'Load'");
+                return;
+            }
+            file = input.files[0];
+
+            var dbReference = firebase.database().ref('produtos/'+key).set({
+                nome: nome,
+                referencia: referencia,
+                descricao: descricao,
+                cor: cor,
+                genero: genero,
+                tamanho: tamanho,
+                tipo: tipo,
+                preco: preco
+            }).then(function () {
+                console.log("Produto Cadastrado no Firebase");
+
+                var storageRef = firebase.storage().ref().child('images/'+key+'.jpg');
+                storageRef.put(file).then(function(snapshot) {
+                    alert("Produto Cadastrado");
+                    window.location.href = "index.html";
+                });
+
+            }).catch(function (error) {
+                console.log("Erro no Cadastro de Produto Firebase");
+                alert("Erro ao cadastrar produto");
+            });
+        });
+    });
+
+    </script>
 </head>
 <body>
-    
-    <form>
+
+    <form style="padding:20px" action="#">
         <div class="form-group">
-            <label for="exampleInputEmail1">Email address</label>
-            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+            <label for="nome">Nome</label>
+            <input type="text" class="form-control" id="nome" placeholder="Escreva o nome do produto">
         </div>
         <div class="form-group">
-            <label for="exampleInputPassword1">Password</label>
-            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+            <label for="cor">Cor</label>
+            <input type="text" class="form-control" id="cor" placeholder="Escreva a cor do produto">
         </div>
         <div class="form-group">
-            <label for="exampleSelect1">Example select</label>
-            <select class="form-control" id="exampleSelect1">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
+            <label for="descricao">Descricao do Produto</label>
+            <textarea class="form-control" id="descricao" rows="3" placeholder="Descreva o produto"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="tamanho">Tamanho</label>
+            <select class="form-control" id="tamanho">
+                <option value="PP">PP</option>
+                <option value="P">P</option>
+                <option value="M">M</option>
+                <option value="G">G</option>
+                <option value="GG">GG</option>
             </select>
         </div>
         <div class="form-group">
-            <label for="exampleSelect2">Example multiple select</label>
-            <select multiple class="form-control" id="exampleSelect2">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
+            <label for="tipo">Tipo</label>
+            <select class="form-control" id="tipo">
+                <option value="bermudas">Bermuda</option>
+                <option value="calcas">Calca</option>
+                <option value="camisas">Camisa</option>
+                <option value="camisetas">Camiseta</option>
+                <option value="saias">Saia</option>
+                <option value="vestidos">Vestido</option>
             </select>
         </div>
         <div class="form-group">
-            <label for="exampleTextarea">Example textarea</label>
-            <textarea class="form-control" id="exampleTextarea" rows="3"></textarea>
+            <label for="genero">Genero</label>
+            <select class="form-control" id="genero">
+                <option value="masculino">Masculino</option>
+                <option value="feminino">Feminino</option>
+            </select>
         </div>
         <div class="form-group">
-            <label for="exampleInputFile">File input</label>
-            <input type="file" class="form-control-file" id="exampleInputFile" aria-describedby="fileHelp">
-            <small id="fileHelp" class="form-text text-muted">This is some placeholder block-level help text for the above input. It's a bit lighter and easily wraps to a new line.</small>
+            <label for="preco">Preco</label>
+            <input type="number" step="any" class="form-control" id="preco" placeholder="Digite o preço do produto">
         </div>
-        <fieldset class="form-group">
-            <legend>Radio buttons</legend>
-            <div class="form-check">
-                <label class="form-check-label">
-                    <input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios1" value="option1" checked>
-                    Option one is this and that&mdash;be sure to include why it's great
-                </label>
-            </div>
-            <div class="form-check">
-                <label class="form-check-label">
-                    <input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios2" value="option2">
-                    Option two can be something else and selecting it will deselect option one
-                </label>
-            </div>
-            <div class="form-check disabled">
-                <label class="form-check-label">
-                    <input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios3" value="option3" disabled>
-                    Option three is disabled
-                </label>
-            </div>
-        </fieldset>
-        <div class="form-check">
-            <label class="form-check-label">
-                <input type="checkbox" class="form-check-input">
-                Check me out
-            </label>
+        <div class="form-group">
+            <label for="fotoProduto">Foto do Produto</label>
+            <input type="file" class="form-control-file" id="fotoProduto">
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" id="btnCadastrar" class="btn btn-primary">Cadastrar</button>
     </form>
 
 </body>
