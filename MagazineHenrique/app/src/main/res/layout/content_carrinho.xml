@@ -1,28 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f2f2f2"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.matheus.magazinehenrique.activity.CarrinhoActivity"
     tools:showIn="@layout/app_bar_carrinho">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/relativeLayoutBottomCarrinho"
+        android:background="#f2f2f2">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvCarrinho"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+    </ScrollView>
+
     <RelativeLayout
+        android:layout_alignParentBottom="true"
+        android:id="@+id/relativeLayoutBottomCarrinho"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rvCarrinho"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
 
         <LinearLayout
             android:id="@+id/linearLayoutCupom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/rvCarrinho"
             android:background="@android:color/white"
             android:orientation="horizontal"
             android:paddingLeft="15dp"
@@ -105,6 +117,6 @@
                 android:textColor="@android:color/white"
                 android:textSize="12sp" />
         </LinearLayout>
-
     </RelativeLayout>
-</ScrollView>
+
+</RelativeLayout>
