@@ -2,14 +2,17 @@
 
 A Shopping Mobile Application especialized in Clothes and Shoes
 
-### Prerequisites
+## Prerequisites
 
 Smartphone with Android 6.0+
 
-### Installing
+## Installation
 
 * Install Android Studio
 * Upgrade and Fix Bugs in Gradle
+
+## Usage
+
 * Connect your smartphone in the PC 
 * Turn on the debugging option in programmer mode
 * Click the Run Button in Android Studio
@@ -28,3 +31,5 @@ Smartphone with Android 6.0+
 * **Matheus dos Santos Mendes**
 * **Laura Tasso**
 
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
